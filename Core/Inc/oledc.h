@@ -53,14 +53,14 @@ void oledc_reset();
 void oledc_one_arg_commands (uint8_t command, uint8_t args, SPI_HandleTypeDef *hspi1);
 void oledc_more_arg_commands ( uint8_t command, uint8_t *args, uint16_t args_le, SPI_HandleTypeDef *hspi1 );
 void oledc_fill_screen (uint16_t color, SPI_HandleTypeDef *hspi1);
-static void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi1);
+void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi1);
 void oledc_text ( oledc_t *ctx, uint8_t *text, uint16_t x, uint16_t y , SPI_HandleTypeDef *hspi1);
 void oledc_set_font ( oledc_t *ctx, const uint8_t *font_s, uint16_t color );
-static void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1);
-static void character ( oledc_t *ctx, uint16_t ch, SPI_HandleTypeDef *hspi1);
+void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1);
+void character ( oledc_t *ctx, uint16_t ch, SPI_HandleTypeDef *hspi1);
 void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi1);
-static void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1);
-
+void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1);
+void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi1);
 
 /* USER CODE BEGIN EFP */
 
@@ -213,7 +213,7 @@ static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
 
 /* USER CODE BEGIN PV */
 
-static oledc_t oledc;
+
 
 
 //#define text1 "Hello"

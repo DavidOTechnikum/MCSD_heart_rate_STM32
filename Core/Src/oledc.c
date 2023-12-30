@@ -3,18 +3,20 @@
  *
  *  Created on: Dec 30, 2023
  *      Author: David Oberleitner
+ *
+ *      Code adapted from example code by Mikroe https://libstock.mikroe.com/projects/view/1117/oled-c-click
+ *      incl. fonts library (oledc_font.h)
  */
 #include "oledc.h"
-//#include "oledc_font.h"
 #include "main.h"
 
 
 
 void oledc_default_cfg (SPI_HandleTypeDef *hspi1) {
-	  //CS einschalten
+	  // Enable CS
 	  HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
 
-	  // EN einschalten - oledc_enable
+	  // Enable OLED via EN
 	  HAL_GPIO_WritePin(OLED_EN_GPIO_Port, OLED_EN_Pin, GPIO_PIN_SET);
 
 	  oledc_reset();
@@ -24,7 +26,7 @@ void oledc_default_cfg (SPI_HandleTypeDef *hspi1) {
 	oledc_one_arg_commands(OLEDC_COMMAND_LOCK, OLEDC_DEFAULT_CMD_LOCK, hspi1);
 	oledc_more_arg_commands(OLEDC_SLEEP_ON,  0,  0 , hspi1);
 
-	/* Setup SSD1351 */
+	// Setup SSD1351
 	oledc_one_arg_commands(OLEDC_SET_REMAP,       OLEDC_DEFAULT_REMAP        , hspi1);
 	oledc_one_arg_commands(OLEDC_MUX_RATIO,       OLEDC_DEFAULT_MUX_RATIO    , hspi1);
 	oledc_one_arg_commands(OLEDC_SET_START_LINE,  OLEDC_DEFAULT_START_LINE   , hspi1);
@@ -38,7 +40,7 @@ void oledc_default_cfg (SPI_HandleTypeDef *hspi1) {
 	oledc_more_arg_commands(OLEDC_CONTRAST,   OLEDC_DEFAULT_CONTRAST, 3 , hspi1);
 	oledc_more_arg_commands(OLEDC_VSL,        OLEDC_DEFAULT_VSL,      3 , hspi1);
 
-	/* Set normal mode and turn on display */
+	// Set normal mode and turn on display
 	oledc_more_arg_commands(OLEDC_MODE_NORMAL, 0, 0 , hspi1);
 	oledc_more_arg_commands(OLEDC_SLEEP_OFF,   0, 0 , hspi1);
 	oledc_fill_screen(0 , hspi1);
@@ -46,53 +48,33 @@ void oledc_default_cfg (SPI_HandleTypeDef *hspi1) {
 
 void oledc_reset() {
 	  HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_SET);
-	//  digital_out_high( &ctx->rst );
 	  HAL_Delay(1);
-	//  Delay_1ms();
 	  HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_RESET);
-	//  digital_out_low( &ctx->rst );
 	  HAL_Delay(1);
-	//  Delay_1ms();
 	  HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_SET);
-	//  digital_out_high( &ctx->rst );
 	  HAL_Delay(100);
-	//  Delay_100ms();
 }
 
 void oledc_one_arg_commands (uint8_t command, uint8_t args, SPI_HandleTypeDef *hspi1) {
-    //spi_master_select_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-    //digital_out_low( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-    //spi_master_write( &ctx->spi, &command, 1 );
     HAL_SPI_Transmit_IT(hspi1, &command, 1);
-    //digital_out_high( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
-    //spi_master_write( &ctx->spi, &args, 1 );
     HAL_SPI_Transmit_IT(hspi1, &args, 1);
-    //spi_master_deselect_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 }
 
 void oledc_more_arg_commands ( uint8_t command, uint8_t *args, uint16_t args_len, SPI_HandleTypeDef *hspi1) {
     uint16_t cnt;
-
-    //spi_master_select_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-    //digital_out_low( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-    //spi_master_write( &ctx->spi, &command, 1 );
     HAL_SPI_Transmit_IT(hspi1, &command, 1);
-    //digital_out_high( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
 
     for ( cnt = 0; cnt < args_len; cnt++ )
     {
-        //spi_master_write( &ctx->spi, &args[cnt], 1 );
         HAL_SPI_Transmit_IT(hspi1, &args[cnt], 1);
     }
-
-    //spi_master_deselect_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 }
 
@@ -100,7 +82,7 @@ void oledc_fill_screen (uint16_t color, SPI_HandleTypeDef *hspi1) {
     box_area(0, 0, 96, 96, color , hspi1);
 }
 
-static void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi1) {
+void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi1) {
     uint8_t   cmd       = OLEDC_WRITE_RAM;
     uint16_t  cnt       = ( end_col - start_col ) * ( end_row - start_row );
     uint8_t   clr[ 2 ]  = { 0 };
@@ -126,39 +108,28 @@ static void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uin
 
     oledc_more_arg_commands(OLEDC_SET_COL_ADDRESS, cols, 2 , hspi1);
     oledc_more_arg_commands(OLEDC_SET_ROW_ADDRESS, rows, 2 , hspi1);
-    //spi_master_select_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-    //digital_out_low( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-    //spi_master_write( &ctx->spi, &cmd, 1 );
     HAL_SPI_Transmit_IT(hspi1, &cmd, 1);
-    //digital_out_high( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
 
-    while( cnt-- )
-    {
-       //spi_master_write( &ctx->spi, &clr[0], 1 );
+    while( cnt-- ) {
         HAL_SPI_Transmit_IT(hspi1, &clr[0], 1);
-       //spi_master_write( &ctx->spi, &clr[1], 1 );
         HAL_SPI_Transmit_IT(hspi1, &clr[1], 1);
     }
-    //spi_master_deselect_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 }
 
 void oledc_text ( oledc_t *ctx, uint8_t *text, uint16_t x, uint16_t y , SPI_HandleTypeDef *hspi1) {
     uint8_t *ptr = text;
-
-    if ( ( x >= OLEDC_SCREEN_WIDTH ) || ( y >= OLEDC_SCREEN_HEIGHT ) )
-    {
+    if ( ( x >= OLEDC_SCREEN_WIDTH ) || ( y >= OLEDC_SCREEN_HEIGHT ) ) {
         return;
     }
 
     ctx->x_cord = x;
     ctx->y_cord = y;
 
-    while( *ptr )
-    {
+    while( *ptr ) {
         character( ctx, *ptr++ , hspi1);
     }
 }
@@ -171,12 +142,11 @@ void oledc_set_font ( oledc_t *ctx, const uint8_t *font_s, uint16_t color ) {
     ctx->font_color         = color;
 }
 
-static void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1) {
+void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1) {
     uint8_t cmd       = OLEDC_WRITE_RAM;
     uint8_t clr[ 2 ]  = { 0 };
 
-    if( ( col > OLEDC_SCREEN_WIDTH ) || ( row > OLEDC_SCREEN_HEIGHT ) )
-    {
+    if( ( col > OLEDC_SCREEN_WIDTH ) || ( row > OLEDC_SCREEN_HEIGHT ) ) {
         return;
     }
     cols[ 0 ] = OLEDC_COL_OFF + col;
@@ -188,23 +158,16 @@ static void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_
 
     oledc_more_arg_commands(OLEDC_SET_COL_ADDRESS, cols, 2 , hspi1);
     oledc_more_arg_commands(OLEDC_SET_ROW_ADDRESS, rows, 2 , hspi1);
-    //spi_master_select_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-    //digital_out_low( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-    //spi_master_write( &ctx->spi, &cmd, 1 );
     HAL_SPI_Transmit_IT(hspi1, &cmd, 1);
-    //digital_out_high( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
-    //spi_master_write( &ctx->spi, &clr[0], 1 );
     HAL_SPI_Transmit_IT(hspi1, &clr[0], 1);
-    //spi_master_write( &ctx->spi, &clr[1], 1 );
     HAL_SPI_Transmit_IT(hspi1, &clr[1], 1);
-    //spi_master_deselect_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 }
 
-static void character ( oledc_t *ctx, uint16_t ch , SPI_HandleTypeDef *hspi1) {
+void character ( oledc_t *ctx, uint16_t ch , SPI_HandleTypeDef *hspi1) {
     uint8_t     ch_width = 0;
     uint8_t     x_cnt;
     uint8_t     y_cnt;
@@ -233,14 +196,11 @@ static void character ( oledc_t *ctx, uint16_t ch , SPI_HandleTypeDef *hspi1) {
     ch_bitmap = ctx->font_obj + offset;
 
     y = ctx->y_cord;
-    for (y_cnt = 0; y_cnt < ctx->font_height; y_cnt++)
-    {
+    for (y_cnt = 0; y_cnt < ctx->font_height; y_cnt++) {
         x = ctx->x_cord;
         mask = 0;
-        for( x_cnt = 0; x_cnt < ch_width; x_cnt++ )
-        {
-            if( !mask )
-            {
+        for( x_cnt = 0; x_cnt < ch_width; x_cnt++ ) {
+            if( !mask ) {
                 temp = *ch_bitmap++;
                 mask = 0x01;
             }
@@ -257,10 +217,10 @@ static void character ( oledc_t *ctx, uint16_t ch , SPI_HandleTypeDef *hspi1) {
 
 void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi1) {
     const uint8_t *ptr = img;
-    draw_area( ctx, col_off, row_off, col_off + ptr[2], row_off + ptr[4], ptr , hspi1);
+    draw_area( ctx, col_off, row_off, col_off + ptr[2], row_off + ptr[4], ptr, hspi1);
 }
 
-static void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1) {
+void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1) {
     uint16_t    tmp  = 0;
     uint8_t     cmd  = OLEDC_WRITE_RAM;
     uint8_t     frb  = 0;
@@ -288,26 +248,22 @@ static void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8
 
     oledc_more_arg_commands(OLEDC_SET_COL_ADDRESS, cols, 2, hspi1);
     oledc_more_arg_commands(OLEDC_SET_ROW_ADDRESS, rows, 2, hspi1);
-//    spi_master_select_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-//    digital_out_low( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-//    spi_master_write( &ctx->spi, &cmd, 1 );
     HAL_SPI_Transmit_IT(hspi1, &cmd, 1);
-//    digital_out_high( &ctx->dc );
     HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
 
-    while( cnt-- )
-    {
+    while( cnt-- ) {
         frb = ptr[ tmp + 1 ];
         srb = ptr[ tmp ];
-//        spi_master_write( &ctx->spi, &frb, 1 );
         HAL_SPI_Transmit_IT(hspi1, &frb, 1);
-//        spi_master_write( &ctx->spi, &srb, 1 );
         HAL_SPI_Transmit_IT(hspi1, &srb, 1);
 
         tmp += 2;
     }
-//    spi_master_deselect_device( ctx->chip_select );
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
+}
+
+void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi1) {
+    box_area(col_off, row_off, col_end, row_end, color, hspi1);
 }
