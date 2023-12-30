@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "oledc_font.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,13 +93,33 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+oledc_default_cfg(&hspi1);
 
+uint8_t text1[] = "bla";
+uint8_t text2[] =  "Siu";
+uint8_t text3[]  = "--<--<@";
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  oledc_set_font(&oledc, guiFont_Tahoma_14_Regular, 0);
+	  oledc_fill_screen(0xF800, &hspi1);
+	  oledc_text(&oledc, text1, 30, 35, &hspi1);
+	  HAL_Delay(2000);
+
+	  oledc_fill_screen(0x07FF, &hspi1);
+	  oledc_set_font(&oledc, guiFont_Roboto_Mono11x23_Regular, 0xF800);
+	  oledc_text(&oledc, text2, 33, 35, &hspi1);
+	  HAL_Delay(2000);
+
+	  oledc_fill_screen(0xFFE0, &hspi1);
+	  oledc_set_font(&oledc, guiFont_Tahoma_8_Regular, 0x001F);
+	  oledc_text(&oledc, text3, 28, 40, &hspi1);
+	  HAL_Delay(2000);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

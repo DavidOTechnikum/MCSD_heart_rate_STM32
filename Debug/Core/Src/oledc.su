@@ -1,0 +1,12 @@
+../Core/Src/oledc.c:13:6:oledc_default_cfg	16	static
+../Core/Src/oledc.c:47:6:oledc_reset	8	static
+../Core/Src/oledc.c:62:6:oledc_one_arg_commands	16	static
+../Core/Src/oledc.c:77:6:oledc_more_arg_commands	32	static
+../Core/Src/oledc.c:99:6:oledc_fill_screen	24	static
+../Core/Src/oledc.c:103:13:box_area	32	static
+../Core/Src/oledc.c:149:6:oledc_text	32	static
+../Core/Src/oledc.c:166:6:oledc_set_font	24	static
+../Core/Src/oledc.c:174:13:pixel	24	static
+../Core/Src/oledc.c:207:13:character	64	static
+../Core/Src/oledc.c:258:6:oledc_image	56	static
+../Core/Src/oledc.c:263:13:draw_area	32	static
