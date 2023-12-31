@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "oledc_font.h"
+#include "oledc_image.h"
+#include <stdbool.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,6 +33,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define RECBUF 1							// number of bytes for UART receiving buffer
+#define FRAMELEN 28							// frame length and max. message length
+#define MYEOF '\n'							// end-of-frame
+
 
 /* USER CODE END PD */
 
@@ -45,6 +51,12 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+bool eof_bool = false;
+static oledc_t oledc;
+uint8_t rec_byte;										// buffer for UART receive
+uint8_t receive_frame[FRAMELEN];							// string for UART received messages
+uint8_t receive_frame_copy[FRAMELEN];
+uint8_t frame_index = 0;
 
 /* USER CODE END PV */
 
@@ -53,6 +65,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
+void receive();
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -93,6 +106,16 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+oledc_default_cfg(&hspi1);
+oledc_set_font(&oledc, guiFont_Tahoma_14_Regular, 0);
+oledc_fill_screen(0xF800, &hspi1);
+uint8_t text1[] = "52";
+uint8_t text2[] = "PULSE";
+uint8_t text3[] = "OXYGEN";
+//uint8_t text3[] = "50";
+oledc_text(&oledc, text2, 20, 20, &hspi1);
+oledc_text(&oledc, text1, 40, 40, &hspi1);
+strcpy(receive_frame_copy, text1);
 
   /* USER CODE END 2 */
 
@@ -100,6 +123,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  receive();
+	  oledc_update_number(&oledc, receive_frame, &hspi1);
+
+	  HAL_Delay(2000);
+	  oledc_change_mode(&oledc, receive_frame, text2, &hspi1);
+
+	  HAL_Delay(2000);
+	  oledc_change_mode(&oledc, receive_frame, text3, &hspi1);
+
+
+//	  oledc_rectangle (40, 40, 70, 70, 0xF800, &hspi1);
+//	  oledc_text(&oledc, text1, 40, 40, &hspi1);
+//	  HAL_Delay(2000);
+//	  oledc_rectangle (40, 40, 70, 70, 0xF800, &hspi1);
+//	  oledc_text(&oledc, text3, 40, 40, &hspi1);
+//	  HAL_Delay(2000);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -283,7 +324,38 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void receive() {
+	while (eof_bool == false) {
+		if (HAL_UART_Receive_IT (&huart2, &rec_byte, RECBUF) == HAL_ERROR) {									// read
+			Error_Handler();
+		}
+	}
+	eof_bool = false;
+}
 
+/**
+ * @brief 	UART receiving callback function. Copies each received byte into string "receive_frame".
+ * 			Upon receiving end-of-frame "MYEOF" puts string terminator.
+ * @param 	huart: 	UART handle.
+ * @retval	None
+ */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if (huart == &huart2) {
+		receive_frame[frame_index] = rec_byte;
+
+		if (frame_index == FRAMELEN) {
+			frame_index = 0;
+		}
+		frame_index++;
+
+		if (rec_byte == MYEOF) {
+			receive_frame[frame_index] = '\0';
+			frame_index = 0;
+			eof_bool = true;
+		}
+	}
+
+}
 /* USER CODE END 4 */
 
 /**
