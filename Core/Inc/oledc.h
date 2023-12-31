@@ -54,13 +54,18 @@ void oledc_one_arg_commands (uint8_t command, uint8_t args, SPI_HandleTypeDef *h
 void oledc_more_arg_commands ( uint8_t command, uint8_t *args, uint16_t args_le, SPI_HandleTypeDef *hspi1 );
 void oledc_fill_screen (uint16_t color, SPI_HandleTypeDef *hspi1);
 void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi1);
-void oledc_text ( oledc_t *ctx, uint8_t *text, uint16_t x, uint16_t y , SPI_HandleTypeDef *hspi1);
-void oledc_set_font ( oledc_t *ctx, const uint8_t *font_s, uint16_t color );
-void pixel ( oledc_t *ctx, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1);
-void character ( oledc_t *ctx, uint16_t ch, SPI_HandleTypeDef *hspi1);
-void oledc_image( oledc_t *ctx, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi1);
-void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1);
+void oledc_text ( oledc_t *oledc, uint8_t *text, uint16_t x, uint16_t y , SPI_HandleTypeDef *hspi1);
+void oledc_set_font ( oledc_t *oledc, const uint8_t *font_s, uint16_t color );
+void pixel ( oledc_t *oledc, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi1);
+void character ( oledc_t *oledc, uint16_t ch, SPI_HandleTypeDef *hspi1);
+void oledc_image( oledc_t *oledc, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi1);
+void draw_area (oledc_t *oledc, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi1);
 void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi1);
+void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1);
+void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi1);
+void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1);
+void oledc_change_mode(oledc_t *oledc,  uint8_t *numbers, uint8_t *text, SPI_HandleTypeDef *hspi1);
+
 
 /* USER CODE BEGIN EFP */
 
@@ -196,6 +201,7 @@ void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t
 /** \} */
 
 #define OLEDC_DUMMY 0
+#define OLEDC_MAX 96
 
 static uint8_t cols[ 2 ]    = { OLEDC_COL_OFF, OLEDC_COL_OFF + 95 };
 static uint8_t rows[ 2 ]    = { OLEDC_ROW_OFF, OLEDC_ROW_OFF + 95 };
@@ -213,7 +219,7 @@ static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
 
 /* USER CODE BEGIN PV */
 
-
+//static oledc_t oledc;
 
 
 //#define text1 "Hello"

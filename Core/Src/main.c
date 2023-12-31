@@ -37,6 +37,7 @@
 #define FRAMELEN 28							// frame length and max. message length
 #define MYEOF '\n'							// end-of-frame
 
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,6 +55,7 @@ bool eof_bool = false;
 static oledc_t oledc;
 uint8_t rec_byte;										// buffer for UART receive
 uint8_t receive_frame[FRAMELEN];							// string for UART received messages
+uint8_t receive_frame_copy[FRAMELEN];
 uint8_t frame_index = 0;
 
 /* USER CODE END PV */
@@ -109,10 +111,11 @@ oledc_set_font(&oledc, guiFont_Tahoma_14_Regular, 0);
 oledc_fill_screen(0xF800, &hspi1);
 uint8_t text1[] = "52";
 uint8_t text2[] = "PULSE";
+uint8_t text3[] = "OXYGEN";
 //uint8_t text3[] = "50";
 oledc_text(&oledc, text2, 20, 20, &hspi1);
 oledc_text(&oledc, text1, 40, 40, &hspi1);
-
+strcpy(receive_frame_copy, text1);
 
   /* USER CODE END 2 */
 
@@ -122,8 +125,14 @@ oledc_text(&oledc, text1, 40, 40, &hspi1);
   {
 
 	  receive();
-	  oledc_rectangle(40, 40, 96, 70, 0xF800, &hspi1);
-	  oledc_text(&oledc, receive_frame, 40, 40, &hspi1);
+	  oledc_update_number(&oledc, receive_frame, &hspi1);
+
+	  HAL_Delay(2000);
+	  oledc_change_mode(&oledc, receive_frame, text2, &hspi1);
+
+	  HAL_Delay(2000);
+	  oledc_change_mode(&oledc, receive_frame, text3, &hspi1);
+
 
 //	  oledc_rectangle (40, 40, 70, 70, 0xF800, &hspi1);
 //	  oledc_text(&oledc, text1, 40, 40, &hspi1);

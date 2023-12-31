@@ -267,3 +267,46 @@ void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_
 void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi1) {
     box_area(col_off, row_off, col_end, row_end, color, hspi1);
 }
+
+void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1) {
+	  for (int i = 40; i <= OLEDC_MAX; i += 5) {
+		  if (i+14 < OLEDC_MAX) {
+			  oledc_rectangle(40, i, 70, i+14, 0xF800, hspi1);
+		  } else {
+			  oledc_rectangle(40, i, 70, 96, 0xF800, hspi1);
+		  }
+		  oledc_text(oledc, numbers, 40, i, hspi1);
+		  HAL_Delay(200);
+	  }
+}
+
+void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi1) {
+	  for (int i = 20; i <= OLEDC_MAX; i += 4) {
+		  oledc_rectangle(i-4, 20, 96, 39, 0xF800, hspi1);
+		  oledc_text(oledc, text, i, 20, hspi1);
+		  HAL_Delay(100);
+	  }
+}
+
+void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1) {
+	oledc_rectangle (40, 40, 70, 70, 0xF800, hspi1);
+	oledc_text(oledc, numbers, 40, 40, hspi1);
+}
+
+
+void oledc_change_mode(oledc_t *oledc, uint8_t *numbers, uint8_t *text, SPI_HandleTypeDef *hspi1) {
+	uint8_t pulse[] = "PULSE";
+	uint8_t oxygen[] = "OXYGEN";
+
+	if (strcmp(text, pulse) == 0) {
+		oledc_numbers_fade(oledc, numbers, hspi1);
+		oledc_text_fade(oledc, text, hspi1);
+		oledc_text(oledc, numbers, 40, 40, hspi1);
+		oledc_text(oledc, oxygen, 20, 20, hspi1);
+	} else {
+		oledc_numbers_fade(oledc, numbers, hspi1);
+		oledc_text_fade(oledc, text, hspi1);
+		oledc_text(oledc, numbers, 40, 40, hspi1);
+		oledc_text(oledc, pulse, 20, 20, hspi1);
+	}
+}
