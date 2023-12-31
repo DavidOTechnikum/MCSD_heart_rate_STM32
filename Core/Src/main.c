@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "oledc_font.h"
 #include "oledc_image.h"
-#include <stdbool.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,7 +65,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
-void receive();
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -124,14 +123,19 @@ strcpy(receive_frame_copy, text1);
   while (1)
   {
 
+	  while (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7)) {
+		  if (!debounce())
+			  break;
+		  }
+
 	  receive();
 	  oledc_update_number(&oledc, receive_frame, &hspi1);
 
-	  HAL_Delay(2000);
-	  oledc_change_mode(&oledc, receive_frame, text2, &hspi1);
-
-	  HAL_Delay(2000);
-	  oledc_change_mode(&oledc, receive_frame, text3, &hspi1);
+//	  HAL_Delay(2000);
+//	  oledc_change_mode(&oledc, receive_frame, text2, &hspi1);
+//
+//	  HAL_Delay(2000);
+//	  oledc_change_mode(&oledc, receive_frame, text3, &hspi1);
 
 
 //	  oledc_rectangle (40, 40, 70, 70, 0xF800, &hspi1);
@@ -311,6 +315,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BUTTON_Pin */
+  GPIO_InitStruct.Pin = BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : OLED_CS_Pin OLED_DC_Pin */
   GPIO_InitStruct.Pin = OLED_CS_Pin|OLED_DC_Pin;
