@@ -14,6 +14,6 @@
 
 #define DEBOUNCE 5
 
-bool debounce();
+bool button_debounce();
 
 #endif /* INC_BUTTON_H_ */

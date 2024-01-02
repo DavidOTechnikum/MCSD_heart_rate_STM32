@@ -1,1 +1,1 @@
-../Core/Src/button.c:11:6:debounce	16	static
+../Core/Src/button.c:11:6:button_debounce	16	static

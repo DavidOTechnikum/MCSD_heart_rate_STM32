@@ -35,6 +35,7 @@ extern "C" {
 #include "button.h"
 #include "error_led.h"
 #include <stdbool.h>
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -91,6 +92,9 @@ void Error_Handler(void);
 #define OLED_SDI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+
+
+
 
 /* USER CODE END Private defines */
 

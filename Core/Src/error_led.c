@@ -2,17 +2,14 @@
  * error_led.c
  *
  *  Created on: Jan 2, 2024
- *      Author: Dave
+ *      Author: David Oberleitner
  */
 
 #include "error_led.h"
 #include "main.h"
 
-void number_check(uint8_t number, TIM_HandleTypeDef *htim) {
-	uint8_t low = 10;
-	uint8_t high = 99;
-
-	if (number < low || number > high) {
+void error_led_number_check(uint8_t number, TIM_HandleTypeDef *htim) {
+	if (number < LOW || number > HIGH) {
 		error_led_blink(htim);
 	} else {
 		HAL_TIM_Base_Stop_IT(htim);

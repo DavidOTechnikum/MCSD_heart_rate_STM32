@@ -2,13 +2,13 @@
  * button.c
  *
  *  Created on: Dec 31, 2023
- *      Author: Dave
+ *      Author: David Oberleitner
  */
 
 #include "button.h"
 #include "main.h"
 
-bool debounce() {
+bool button_debounce() {
 	GPIO_PinState button;
 	uint8_t counter = 0;
 

@@ -30,7 +30,7 @@ Core/Src/oledc.o: ../Core/Src/oledc.c ../Core/Inc/oledc.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
  ../Core/Inc/main.h ../Core/Inc/oledc.h ../Core/Inc/button.h \
- ../Core/Inc/error_led.h ../Core/Inc/main.h
+ ../Core/Inc/error_led.h ../Core/Inc/main.h ../Core/Inc/oledc_font.h
 ../Core/Inc/oledc.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -67,3 +67,4 @@ Core/Src/oledc.o: ../Core/Src/oledc.c ../Core/Inc/oledc.h \
 ../Core/Inc/button.h:
 ../Core/Inc/error_led.h:
 ../Core/Inc/main.h:
+../Core/Inc/oledc_font.h:
