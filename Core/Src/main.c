@@ -69,7 +69,7 @@ static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
-
+void receive();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -114,11 +114,11 @@ oledc_set_font(&oledc, guiFont_Tahoma_14_Regular, 0);
 oledc_fill_screen(0xF800, &hspi1);
 uint8_t text1[] = "52";
 uint8_t text2[] = "PULSE";
-uint8_t text3[] = "OXYGEN";
+//uint8_t text3[] = "OXYGEN";
 //uint8_t text3[] = "50";
 oledc_text(&oledc, text2, 20, 20, &hspi1);
 oledc_text(&oledc, text1, 40, 40, &hspi1);
-strcpy(receive_frame_copy, text1);
+//strcpy((char*)receive_frame_copy, (char*)text1);
 HAL_GPIO_WritePin(GPIOA, ERROR_LED_Pin, GPIO_PIN_SET);
 
   /* USER CODE END 2 */

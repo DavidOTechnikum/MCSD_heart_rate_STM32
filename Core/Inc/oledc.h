@@ -204,15 +204,15 @@ void oledc_change_mode(oledc_t *oledc,  uint8_t *numbers, uint8_t *text, SPI_Han
 #define OLEDC_DUMMY 0
 #define OLEDC_MAX 96
 
-static uint8_t cols[ 2 ]    = { OLEDC_COL_OFF, OLEDC_COL_OFF + 95 };
-static uint8_t rows[ 2 ]    = { OLEDC_ROW_OFF, OLEDC_ROW_OFF + 95 };
-
-static uint8_t OLEDC_DEFAULT_REMAP = OLEDC_RMP_INC_HOR | OLEDC_RMP_COLOR_REV |
-                                OLEDC_RMP_SEQ_RGB | OLEDC_RMP_SCAN_REV |
-                                OLEDC_RMP_SPLIT_ENABLE | OLEDC_COLOR_65K;
-
-static  uint8_t OLEDC_DEFAULT_VSL[ 3 ]       = { 0xA0, 0xB5, 0x55 };
-static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
+//static uint8_t cols[ 2 ]    = { OLEDC_COL_OFF, OLEDC_COL_OFF + 95 };
+//static uint8_t rows[ 2 ]    = { OLEDC_ROW_OFF, OLEDC_ROW_OFF + 95 };
+//
+//static uint8_t OLEDC_DEFAULT_REMAP = OLEDC_RMP_INC_HOR | OLEDC_RMP_COLOR_REV |
+//                                OLEDC_RMP_SEQ_RGB | OLEDC_RMP_SCAN_REV |
+//                                OLEDC_RMP_SPLIT_ENABLE | OLEDC_COLOR_65K;
+//
+//static  uint8_t OLEDC_DEFAULT_VSL[ 3 ]       = { 0xA0, 0xB5, 0x55 };
+//static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
 
 /* USER CODE END Private defines */
 

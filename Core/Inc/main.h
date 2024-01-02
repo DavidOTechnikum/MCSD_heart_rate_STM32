@@ -32,6 +32,8 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "oledc.h"
+#include "button.h"
+#include "error_led.h"
 #include <stdbool.h>
 /* USER CODE END Includes */
 
