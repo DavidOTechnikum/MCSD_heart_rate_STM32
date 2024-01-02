@@ -36,7 +36,19 @@ SUMMARY: (...)
 ### The following pin is used for Button: 
 
 + PA7/A6 (GPIO in)
+
+### The following pin is used for Error LED (RGB red):
+
++ PA6/A5
 ---
+
+## Timers
+
+The following timers are used for this project: 
+
++ TIM6 for Error LED
+---
+
 
 ## Notes and Known Issues
 (...)
