@@ -1,0 +1,2 @@
+../Core/Src/error_led.c:11:6:number_check	3
+../Core/Src/error_led.c:23:6:error_led_blink	1
