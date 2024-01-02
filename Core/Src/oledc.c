@@ -6,6 +6,8 @@
  *
  *      Code adapted from example code by Mikroe https://libstock.mikroe.com/projects/view/1117/oled-c-click
  *      incl. fonts library (oledc_font.h)
+ *
+ *
  */
 #include "oledc.h"
 #include "main.h"
@@ -90,10 +92,10 @@ void oledc_more_arg_commands ( uint8_t command, uint8_t *args, uint16_t args_len
 }
 
 void oledc_fill_screen (uint16_t color, SPI_HandleTypeDef *hspi) {
-    box_area(0, 0, 96, 96, color , hspi);
+    oledc_box_area(OLEDC_MIN, OLEDC_MIN, OLEDC_MAX, OLEDC_MAX, color, hspi);
 }
 
-void box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi) {
+void oledc_box_area (uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, uint16_t color, SPI_HandleTypeDef *hspi) {
     uint8_t   cmd       = OLEDC_WRITE_RAM;
     uint16_t  cnt       = ( end_col - start_col ) * ( end_row - start_row );
     uint8_t   clr[ 2 ]  = { 0 };
@@ -141,7 +143,7 @@ void oledc_text ( oledc_t *oledc, uint8_t *text, uint16_t x, uint16_t y , SPI_Ha
     oledc->y_cord = y;
 
     while( *ptr ) {
-        character( oledc, *ptr++ , hspi);
+        oledc_character( oledc, *ptr++ , hspi);
     }
 }
 
@@ -153,7 +155,7 @@ void oledc_set_font ( oledc_t *oledc, const uint8_t *font_s, uint16_t color ) {
     oledc->font_color         = color;
 }
 
-void pixel ( oledc_t *oledc, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi) {
+void oledc_pixel ( oledc_t *oledc, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi) {
     uint8_t cmd       = OLEDC_WRITE_RAM;
     uint8_t clr[ 2 ]  = { 0 };
 
@@ -178,7 +180,7 @@ void pixel ( oledc_t *oledc, uint8_t col, uint8_t row, uint16_t color, SPI_Handl
     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 }
 
-void character ( oledc_t *oledc, uint16_t ch , SPI_HandleTypeDef *hspi) {
+void oledc_character (oledc_t *oledc, uint16_t ch , SPI_HandleTypeDef *hspi) {
     uint8_t     ch_width = 0;
     uint8_t     x_cnt;
     uint8_t     y_cnt;
@@ -216,7 +218,7 @@ void character ( oledc_t *oledc, uint16_t ch , SPI_HandleTypeDef *hspi) {
                 mask = 0x01;
             }
             if( temp & mask )
-                 pixel( oledc, x, y, oledc->font_color, hspi);
+                 oledc_pixel( oledc, x, y, oledc->font_color, hspi);
 
             x++;
             mask <<= 1;
@@ -226,85 +228,85 @@ void character ( oledc_t *oledc, uint16_t ch , SPI_HandleTypeDef *hspi) {
     oledc->x_cord = x + 1;
 }
 
-void oledc_image( oledc_t *oledc, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi) {
-    const uint8_t *ptr = img;
-    draw_area( oledc, col_off, row_off, col_off + ptr[2], row_off + ptr[4], ptr, hspi);
-}
+//void oledc_image( oledc_t *oledc, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi) {
+//    const uint8_t *ptr = img;
+//    draw_area( oledc, col_off, row_off, col_off + ptr[2], row_off + ptr[4], ptr, hspi);
+//}
+//
+//void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi) {
+//    uint16_t    tmp  = 0;
+//    uint8_t     cmd  = OLEDC_WRITE_RAM;
+//    uint8_t     frb  = 0;
+//    uint8_t     srb  = 0;
+//    uint16_t    cnt  = ( end_col - start_col ) * ( end_row - start_row );
+//
+//    const uint8_t*  ptr = img + OLEDC_IMG_HEAD;
+//
+//    if( ( start_col > OLEDC_SCREEN_WIDTH ) ||
+//        ( end_col > OLEDC_SCREEN_WIDTH ) )
+//        return;
+//
+//    if( ( start_row > OLEDC_SCREEN_HEIGHT ) ||
+//        ( end_row > OLEDC_SCREEN_HEIGHT ) )
+//        return;
+//
+//    if( ( end_col < start_col ) ||
+//        ( end_row < start_row ) )
+//        return;
+//
+//    cols[ 0 ] = OLEDC_COL_OFF + start_col;
+//    cols[ 1 ] = OLEDC_COL_OFF + end_col - 1;
+//    rows[ 0 ] = OLEDC_ROW_OFF + start_row;
+//    rows[ 1 ] = OLEDC_ROW_OFF + end_row - 1;
+//
+//    oledc_more_arg_commands(OLEDC_SET_COL_ADDRESS, cols, 2, hspi);
+//    oledc_more_arg_commands(OLEDC_SET_ROW_ADDRESS, rows, 2, hspi);
+//    HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
+//    HAL_SPI_Transmit_IT(hspi, &cmd, 1);
+//    HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
+//
+//    while( cnt-- ) {
+//        frb = ptr[ tmp + 1 ];
+//        srb = ptr[ tmp ];
+//        HAL_SPI_Transmit_IT(hspi, &frb, 1);
+//        HAL_SPI_Transmit_IT(hspi, &srb, 1);
+//
+//        tmp += 2;
+//    }
+//    HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
+//}
 
-void draw_area (oledc_t *ctx, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi) {
-    uint16_t    tmp  = 0;
-    uint8_t     cmd  = OLEDC_WRITE_RAM;
-    uint8_t     frb  = 0;
-    uint8_t     srb  = 0;
-    uint16_t    cnt  = ( end_col - start_col ) * ( end_row - start_row );
-
-    const uint8_t*  ptr = img + OLEDC_IMG_HEAD;
-
-    if( ( start_col > OLEDC_SCREEN_WIDTH ) ||
-        ( end_col > OLEDC_SCREEN_WIDTH ) )
-        return;
-
-    if( ( start_row > OLEDC_SCREEN_HEIGHT ) ||
-        ( end_row > OLEDC_SCREEN_HEIGHT ) )
-        return;
-
-    if( ( end_col < start_col ) ||
-        ( end_row < start_row ) )
-        return;
-
-    cols[ 0 ] = OLEDC_COL_OFF + start_col;
-    cols[ 1 ] = OLEDC_COL_OFF + end_col - 1;
-    rows[ 0 ] = OLEDC_ROW_OFF + start_row;
-    rows[ 1 ] = OLEDC_ROW_OFF + end_row - 1;
-
-    oledc_more_arg_commands(OLEDC_SET_COL_ADDRESS, cols, 2, hspi);
-    oledc_more_arg_commands(OLEDC_SET_ROW_ADDRESS, rows, 2, hspi);
-    HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET);
-    HAL_SPI_Transmit_IT(hspi, &cmd, 1);
-    HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET);
-
-    while( cnt-- ) {
-        frb = ptr[ tmp + 1 ];
-        srb = ptr[ tmp ];
-        HAL_SPI_Transmit_IT(hspi, &frb, 1);
-        HAL_SPI_Transmit_IT(hspi, &srb, 1);
-
-        tmp += 2;
-    }
-    HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
-}
-
-void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi) {
-    box_area(col_off, row_off, col_end, row_end, color, hspi);
-}
+//void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi) {
+//    box_area(col_off, row_off, col_end, row_end, color, hspi);
+//}
 
 void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi) {
-	  for (int i = 40; i <= OLEDC_MAX; i += 5) {
-		  if (i+14 < OLEDC_MAX) {
-			  oledc_rectangle(40, i, 70, i+14, 0xF800, hspi);
+	  for (int i = NUM_ROW; i <= OLEDC_MAX; i += NUM_FADE) {
+		  if (i+NUM_OFFSET < OLEDC_MAX) {
+			  oledc_box_area(NUM_COL, i, NUM_ROW_END, i+NUM_OFFSET, BACKGROUND, hspi);
 		  } else {
-			  oledc_rectangle(40, i, 70, 96, 0xF800, hspi);
+			  oledc_box_area(NUM_COL, i, NUM_ROW_END, OLEDC_MAX, BACKGROUND, hspi);
 		  }
-		  oledc_text(oledc, numbers, 40, i, hspi);
+		  oledc_text(oledc, numbers, NUM_COL, i, hspi);
 		  HAL_Delay(200);
 	  }
 }
 
 void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi) {
-	  for (int i = 20; i <= OLEDC_MAX; i += 4) {
-		  oledc_rectangle(i-4, 20, 96, 39, 0xF800, hspi);
-		  oledc_text(oledc, text, i, 20, hspi);
+	  for (int i = TEXT_COL; i <= OLEDC_MAX; i += TEXT_FADE) {
+		  oledc_box_area(i-TEXT_FADE, TEXT_ROW, OLEDC_MAX, TEXT_ROW_END, BACKGROUND, hspi);
+		  oledc_text(oledc, text, i, TEXT_ROW, hspi);
 		  HAL_Delay(100);
 	  }
 }
 
 void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi, TIM_HandleTypeDef *htim) {
-	oledc_rectangle (40, 40, 70, 70, 0xF800, hspi);
-	oledc_text(oledc, numbers, 40, 40, hspi);
+	oledc_box_area (NUM_COL, NUM_ROW, NUM_COL_END, NUM_ROW_END, BACKGROUND, hspi);
+	oledc_text(oledc, numbers, NUM_COL, NUM_ROW, hspi);
 	char *ptr;
 	uint8_t number = strtol((char*)numbers, &ptr, 10);
-	number_check(number, htim);
+	error_led_number_check(number, htim);
 }
 
 
@@ -315,13 +317,13 @@ void oledc_change_mode(oledc_t *oledc, uint8_t *numbers, uint8_t *text, SPI_Hand
 	if (strcmp((char*)text, (char*)pulse) == 0) {
 		oledc_numbers_fade(oledc, numbers, hspi);
 		oledc_text_fade(oledc, text, hspi);
-		oledc_text(oledc, numbers, 40, 40, hspi);
-		oledc_text(oledc, oxygen, 20, 20, hspi);
+		oledc_text(oledc, numbers, NUM_COL, NUM_ROW, hspi);
+		oledc_text(oledc, oxygen, TEXT_COL, TEXT_ROW, hspi);
 	} else {
 		oledc_numbers_fade(oledc, numbers, hspi);
 		oledc_text_fade(oledc, text, hspi);
-		oledc_text(oledc, numbers, 40, 40, hspi);
-		oledc_text(oledc, pulse, 20, 20, hspi);
+		oledc_text(oledc, numbers, NUM_COL, NUM_ROW, hspi);
+		oledc_text(oledc, pulse, TEXT_COL, TEXT_ROW, hspi);
 	}
 }
 

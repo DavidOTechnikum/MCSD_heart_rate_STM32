@@ -1,1 +1,1 @@
-../Core/Src/button.c:11:6:debounce	3
+../Core/Src/button.c:11:6:button_debounce	3
