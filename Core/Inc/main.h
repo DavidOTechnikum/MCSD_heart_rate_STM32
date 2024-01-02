@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define VCP_TX_GPIO_Port GPIOA
 #define OLED_EN_Pin GPIO_PIN_3
 #define OLED_EN_GPIO_Port GPIOA
+#define ERROR_LED_Pin GPIO_PIN_6
+#define ERROR_LED_GPIO_Port GPIOA
 #define BUTTON_Pin GPIO_PIN_7
 #define BUTTON_GPIO_Port GPIOA
 #define OLED_CS_Pin GPIO_PIN_0

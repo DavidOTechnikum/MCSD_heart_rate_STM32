@@ -13,5 +13,5 @@
 ../Core/Src/oledc.c:267:6:oledc_rectangle	32	static
 ../Core/Src/oledc.c:271:6:oledc_numbers_fade	40	static
 ../Core/Src/oledc.c:283:6:oledc_text_fade	40	static
-../Core/Src/oledc.c:291:6:oledc_update_number	32	static
-../Core/Src/oledc.c:297:6:oledc_change_mode	48	static
+../Core/Src/oledc.c:291:6:oledc_update_number	40	static
+../Core/Src/oledc.c:300:6:oledc_change_mode	48	static

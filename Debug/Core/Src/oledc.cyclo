@@ -14,4 +14,4 @@
 ../Core/Src/oledc.c:271:6:oledc_numbers_fade	3
 ../Core/Src/oledc.c:283:6:oledc_text_fade	2
 ../Core/Src/oledc.c:291:6:oledc_update_number	1
-../Core/Src/oledc.c:297:6:oledc_change_mode	2
+../Core/Src/oledc.c:300:6:oledc_change_mode	2

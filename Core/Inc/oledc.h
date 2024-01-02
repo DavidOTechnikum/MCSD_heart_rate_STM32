@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include <stdlib.h>
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -63,7 +64,7 @@ void draw_area (oledc_t *oledc, uint8_t start_col, uint8_t start_row, uint8_t en
 void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi1);
 void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1);
 void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi1);
-void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1);
+void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1, TIM_HandleTypeDef *htim);
 void oledc_change_mode(oledc_t *oledc,  uint8_t *numbers, uint8_t *text, SPI_HandleTypeDef *hspi1);
 
 

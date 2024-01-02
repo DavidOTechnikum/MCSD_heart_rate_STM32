@@ -288,9 +288,12 @@ void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi1) {
 	  }
 }
 
-void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1) {
+void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1, TIM_HandleTypeDef *htim) {
 	oledc_rectangle (40, 40, 70, 70, 0xF800, hspi1);
 	oledc_text(oledc, numbers, 40, 40, hspi1);
+	uint8_t *ptr = NULL;
+	uint8_t number = strtol(numbers, ptr, 10);
+	number_check(number, htim);
 }
 
 
