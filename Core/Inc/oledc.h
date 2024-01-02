@@ -18,6 +18,7 @@
 #include "main.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /* USER CODE END Includes */
 
@@ -66,6 +67,8 @@ void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hsp
 void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi1);
 void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi1, TIM_HandleTypeDef *htim);
 void oledc_change_mode(oledc_t *oledc,  uint8_t *numbers, uint8_t *text, SPI_HandleTypeDef *hspi1);
+void oledc_error_message(oledc_t *oledc, SPI_HandleTypeDef *hspi1);
+void oledc_start_screen(bool start, oledc_t *oledc, SPI_HandleTypeDef *hspi);
 
 
 /* USER CODE BEGIN EFP */
@@ -204,28 +207,24 @@ void oledc_change_mode(oledc_t *oledc,  uint8_t *numbers, uint8_t *text, SPI_Han
 #define OLEDC_DUMMY 0
 #define OLEDC_MAX 96
 
-//static uint8_t cols[ 2 ]    = { OLEDC_COL_OFF, OLEDC_COL_OFF + 95 };
-//static uint8_t rows[ 2 ]    = { OLEDC_ROW_OFF, OLEDC_ROW_OFF + 95 };
-//
-//static uint8_t OLEDC_DEFAULT_REMAP = OLEDC_RMP_INC_HOR | OLEDC_RMP_COLOR_REV |
-//                                OLEDC_RMP_SEQ_RGB | OLEDC_RMP_SCAN_REV |
-//                                OLEDC_RMP_SPLIT_ENABLE | OLEDC_COLOR_65K;
-//
-//static  uint8_t OLEDC_DEFAULT_VSL[ 3 ]       = { 0xA0, 0xB5, 0x55 };
-//static  uint8_t OLEDC_DEFAULT_CONTRAST[ 3 ]  = { 0x8A, 0x51, 0x8A };
+#define TEXT_COL 20
+#define TEXT_ROW 20
+#define NUM_COL 40
+#define NUM_ROW 40
+#define ERROR_TEXT_COL 25
+#define WELCOME_TEXT_COL 5
+
+#define BACKGROUND 0xF800
+#define WELCOME_BACKGROUND 0x07E0
+#define ERROR_BACKGROUND 0x07FF
+
+
 
 /* USER CODE END Private defines */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
-//static oledc_t oledc;
-
-
-//#define text1 "Hello"
-//#define text2  "this is the demo"
-//#define text3  "for OLED C click"
 
 /* USER CODE END PV */
 #endif /* INC_OLEDC_H_ */

@@ -21,8 +21,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "oledc_font.h"
-#include "oledc_image.h"
 
 /* USER CODE END Includes */
 
@@ -110,14 +108,7 @@ int main(void)
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 oledc_default_cfg(&hspi1);
-oledc_set_font(&oledc, guiFont_Tahoma_14_Regular, 0);
-oledc_fill_screen(0xF800, &hspi1);
-uint8_t text1[] = "52";
-uint8_t text2[] = "PULSE";
-//uint8_t text3[] = "OXYGEN";
-//uint8_t text3[] = "50";
-oledc_text(&oledc, text2, 20, 20, &hspi1);
-oledc_text(&oledc, text1, 40, 40, &hspi1);
+oledc_start_screen(true, &oledc, &hspi1);
 //strcpy((char*)receive_frame_copy, (char*)text1);
 HAL_GPIO_WritePin(GPIOA, ERROR_LED_Pin, GPIO_PIN_SET);
 
@@ -135,6 +126,9 @@ HAL_GPIO_WritePin(GPIOA, ERROR_LED_Pin, GPIO_PIN_SET);
 
 	  receive();
 	  oledc_update_number(&oledc, receive_frame, &hspi1, &htim6);
+//	  oledc_error_message(&oledc, &hspi1);
+//	  HAL_Delay(2000);
+//	  oledc_start_screen(false, &oledc, &hspi1);
 
 //	  HAL_Delay(2000);
 //	  oledc_change_mode(&oledc, receive_frame, text2, &hspi1);
