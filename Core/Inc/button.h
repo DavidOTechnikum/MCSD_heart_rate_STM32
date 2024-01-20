@@ -1,9 +1,17 @@
 /*
- * button.h
- *
- *  Created on: Dec 31, 2023
- *      Author: Dave
- */
+/**
+  ******************************************************************************
+  * @file           : button.h
+  * @brief          : Header for button.c file.
+  *                   This file contains the includes, defines, and prototypes of button.c.
+  ******************************************************************************
+  *
+  *	MCSD project winter semester 2023/2024 BIC3
+  *
+  *	Author: David Oberleitner
+  *
+  ******************************************************************************
+  */
 
 #ifndef INC_BUTTON_H_
 #define INC_BUTTON_H_

@@ -1,4 +1,14 @@
-
+/**
+  ******************************************************************************
+  * @file           : oledc_font.h
+  * @brief          : Header containing the font data for OLED C v101 Click by MikroE
+  ******************************************************************************
+  *
+  * This code was provided by the lecturer.
+  * Source: https://libstock.mikroe.com/projects/view/1117/oled-c-click
+  *
+  ******************************************************************************
+  */
 
 const uint8_t guiFont_Tahoma_7_Regular[1459] = {
    0x00,

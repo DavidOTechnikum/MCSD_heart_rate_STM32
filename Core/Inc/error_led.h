@@ -1,11 +1,18 @@
 /*
- * error_led.h
- *
- *  Created on: Jan 2, 2024
- *      Author: David Oberleitner
- *
- *      Code for timer-based blinking sourced from Timer Task (Homework)
- */
+/**
+  ******************************************************************************
+  * @file           : error_led.h
+  * @brief          : Header for error_led.c file.
+  *                   This file contains the includes, defines, and prototypes of error_led.c.
+  ******************************************************************************
+  *
+  *	MCSD project winter semester 2023/2024 BIC3
+  *
+  *	Author: David Oberleitner
+  *
+  ******************************************************************************
+  */
+
 
 #ifndef INC_ERROR_LED_H_
 #define INC_ERROR_LED_H_

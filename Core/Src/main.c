@@ -35,7 +35,6 @@
 #define FRAMELEN 28							// frame length and max. message length
 #define MYEOF '\n'							// end-of-frame
 
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,7 +52,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 bool eof_bool = false;
 static oledc_t oledc;
-uint8_t rec_byte;										// buffer for UART receive
+uint8_t rec_byte;											// buffer for UART receive
 uint8_t receive_frame[FRAMELEN];							// string for UART received messages
 uint8_t receive_frame_copy[FRAMELEN];
 uint8_t frame_index = 0;
@@ -66,6 +65,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM6_Init(void);
+
 /* USER CODE BEGIN PFP */
 void receive();
 /* USER CODE END PFP */
@@ -373,6 +373,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+ * @brief	UART receive blocking function.
+ * 			Sourced from class homework "UART Task" by David Oberleitner.
+ * 			Used for testing OLED module alone.
+ * @param	None
+ * @retval	None
+ */
 void receive() {
 	while (eof_bool == false) {
 		if (HAL_UART_Receive_IT (&huart2, &rec_byte, RECBUF) == HAL_ERROR) {									// read
@@ -385,6 +392,8 @@ void receive() {
 /**
  * @brief 	UART receiving callback function. Copies each received byte into string "receive_frame".
  * 			Upon receiving end-of-frame "MYEOF" puts string terminator.
+ * 			Sourced from class homework "UART Task" by David Oberleitner.
+ * 			Used for testing OLED module alone.
  * @param 	huart: 	UART handle.
  * @retval	None
  */
@@ -405,6 +414,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	}
 }
 
+/**
+ * @brief	Function toggles error led, making it blink.
+ * @param	htim: Timer handle
+ * @retval	None
+ */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	HAL_GPIO_TogglePin(GPIOA, ERROR_LED_Pin);
 }

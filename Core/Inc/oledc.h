@@ -1,9 +1,16 @@
-/*
- * oledc.h
- *
- *  Created on: Dec 30, 2023
- *      Author: David Oberleitner
- */
+/**
+  ******************************************************************************
+  * @file           : oledc.h
+  * @brief          : Header for the source file oledc.c
+  * 				  This file contains the includes, defines, and prototypes of oledc.c.
+  ******************************************************************************
+  *
+  * The basic file including the struct and most of the defines stem
+  * from the code provided by the lecturer.
+  * Source: https://libstock.mikroe.com/projects/view/1117/oled-c-click
+  *
+  ******************************************************************************
+  */
 
 #ifndef INC_OLEDC_H_
 #define INC_OLEDC_H_
@@ -60,9 +67,6 @@ void oledc_text ( oledc_t *oledc, uint8_t *text, uint16_t x, uint16_t y , SPI_Ha
 void oledc_set_font ( oledc_t *oledc, const uint8_t *font_s, uint16_t color);
 void oledc_pixel ( oledc_t *oledc, uint8_t col, uint8_t row, uint16_t color, SPI_HandleTypeDef *hspi);
 void oledc_character ( oledc_t *oledc, uint16_t ch, SPI_HandleTypeDef *hspi);
-//void oledc_image( oledc_t *oledc, const uint8_t* img, uint8_t col_off, uint8_t row_off, SPI_HandleTypeDef *hspi);
-//void draw_area (oledc_t *oledc, uint8_t start_col, uint8_t start_row, uint8_t end_col, uint8_t end_row, const uint8_t *img, SPI_HandleTypeDef *hspi);
-//void oledc_rectangle (uint8_t col_off, uint8_t row_off, uint8_t col_end, uint8_t row_end, uint16_t color, SPI_HandleTypeDef *hspi);
 void oledc_numbers_fade(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi);
 void oledc_text_fade(oledc_t *oledc, uint8_t* text, SPI_HandleTypeDef *hspi);
 void oledc_update_number(oledc_t *oledc, uint8_t* numbers, SPI_HandleTypeDef *hspi, TIM_HandleTypeDef *htim);
@@ -204,6 +208,12 @@ void oledc_start_screen(bool start, oledc_t *oledc, SPI_HandleTypeDef *hspi);
 #define OLEDC_DEFAULT_PRECHARGE_2   0x01
 /** \} */
 
+
+
+/**
+ * \defgroup function defines
+ * \{
+ */
 #define OLEDC_MIN 0
 #define OLEDC_MAX 96
 
@@ -223,7 +233,7 @@ void oledc_start_screen(bool start, oledc_t *oledc, SPI_HandleTypeDef *hspi);
 #define BACKGROUND 0x00FF
 #define WELCOME_BACKGROUND 0x07E0
 #define ERROR_BACKGROUND 0xF800
-
+/** \} */
 
 
 /* USER CODE END Private defines */
