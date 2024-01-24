@@ -2,6 +2,7 @@
 AUTHORS: David OBERLEITNER, Johannes SEITZ
 
 ## SUMMARY:
+
 Module 1, Input: MAX30101 High-Sensitivity Pulse Oximeter and Heart-Rate Sensor for Wearable Health
 This module is used to measure and send vitality data regarding the heart rate and oxygen saturation using infrared and photodiodes. It is equipped with a proximity sensor and a sensor to measure the internal temperature. It is accessible through an I2C interface.
 Module 2, Output: OLED C v101 click 96x96 pixel OLED Display (PSP27801, SSD1351 Controller)
