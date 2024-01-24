@@ -1,7 +1,11 @@
 # MCSD_heart_rate_STM32
 AUTHORS: David OBERLEITNER, Johannes SEITZ
 
-SUMMARY: (...)
+## SUMMARY:
+Module 1, Input: MAX30101 High-Sensitivity Pulse Oximeter and Heart-Rate Sensor for Wearable Health
+This module is used to measure and send vitality data regarding the heart rate and oxygen saturation using infrared and photodiodes. It is equipped with a proximity sensor and a sensor to measure the internal temperature. It is accessible through an I2C interface.
+Module 2, Output: OLED C v101 click 96x96 pixel OLED Display (PSP27801, SSD1351 Controller)
+This module is a 96x96 full-graphic display using organic light emitting diodes. Communication is realized through an SPI interface.
 ---
 
 ## Hardware
@@ -51,11 +55,8 @@ The following timers are used for this project:
 
 
 ## Notes and Known Issues
-(...)
-
-## Usage
-
-(...)
+Output works
+Input problems: I2C communication provides no data. 
 ---
 
 
